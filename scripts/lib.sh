@@ -1,6 +1,8 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 
+set -e
+
 curPath=`pwd`
 rootPath=$(dirname "$curPath")
 serverPath=$(dirname "$rootPath")
@@ -17,7 +19,9 @@ OSNAME=`cat ${rootPath}/data/osname.pl`
 VERSION_ID=`cat /etc/*-release | grep VERSION_ID | awk -F = '{print $2}' | awk -F "\"" '{print $2}'`
 echo "${OSNAME}:${VERSION_ID}"
 
-apt install -y python3.11-dev build-essential
+if [ "$OSNAME" == "debian" ] || [ "$OSNAME" == "ubuntu" ]; then
+    apt install -y python3.11-dev build-essential
+fi
 
 # system judge
 if [ "$OSNAME" == "macos" ]; then
@@ -49,16 +53,17 @@ else
     echo "OK"
 fi
 
-
-apt update && apt install -y \
-build-essential curl git \
-libssl-dev zlib1g-dev \
-libbz2-dev libreadline-dev \
-libsqlite3-dev \
-libffi-dev libncursesw5-dev \
-xz-utils tk-dev \
-libxml2-dev libxmlsec1-dev \
-liblzma-dev ca-certificates
+if [ "$OSNAME" == "debian" ] || [ "$OSNAME" == "ubuntu" ]; then
+    apt update && apt install -y \
+    build-essential curl git \
+    libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev \
+    libsqlite3-dev \
+    libffi-dev libncursesw5-dev \
+    xz-utils tk-dev \
+    libxml2-dev libxmlsec1-dev \
+    liblzma-dev ca-certificates
+fi
 
 curl https://pyenv.run | bash
 
@@ -73,14 +78,13 @@ EOF
 
 source ~/.bashrc
 
-pyenv install 3.13.5
-pyenv global 3.13.5
+pyenv install 3.11.2
+pyenv global 3.11.2
 
-pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
 pip install --upgrade pip setuptools wheel virtualenv
 
 
-cd ${rootPath} && pip3pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
+cd ${rootPath} && pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
 
 # pip3 install flask-caching==1.10.1
 # pip3 install mysqlclient
@@ -89,12 +93,12 @@ if [ ! -f ${rootPath}/bin/activate ];then
     cd ${rootPath} && python3 -m venv .
     cd ${rootPath} && source ${rootPath}/bin/activate
 else
-    cd ${rootPath}/panel && source ${rootPath}/bin/activate
+    cd ${rootPath} && source ${rootPath}/bin/activate
 fi
 
 pip install --upgrade pip
 pip3 install --upgrade setuptools
-cd ${rootPath} && pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
+pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
 
 echo "lib ok!"
 # pip3 install flask-caching==1.10.1
