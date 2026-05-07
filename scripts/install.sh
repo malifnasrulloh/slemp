@@ -71,12 +71,7 @@ if [ $OSNAME != "macos" ];then
 	mkdir -p /home/slemp/backup/site
 
 	if [ ! -d /home/slemp/server/panel ];then
-		curl --insecure -sSLo /tmp/master.zip https://codeload.github.com/basoro/slemp/zip/master
-
-		cd /tmp && unzip /tmp/master.zip
-		mv -f /tmp/slemp-master /home/slemp/server/panel
-		rm -rf /tmp/master.zip
-		rm -rf /tmp/slemp-master
+		cp -r /root/slemp /home/slemp/server/panel
 	fi
 
 	# install acme.sh
@@ -137,7 +132,7 @@ if [ ! -e /usr/bin/slemp ]; then
 fi
 
 endTime=`date +%s`
-((outTime=(${endTime}-${startTime})/60))
+outTime=$(( (endTime - startTime) / 60 ))
 echo -e "Time consumed:\033[32m $outTime \033[0mMinute!"
 
 } 1> >(tee slemp-install.log) 2>&1

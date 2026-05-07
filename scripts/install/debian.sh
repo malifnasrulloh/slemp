@@ -16,9 +16,9 @@ if [ "$__GET_BIT" == "32" ];then
 fi
 
 # synchronize time first
-apt-get install ntpdate -y
-NTPHOST='time.nist.gov'
-ntpdate $NTPHOST | logger -t NTP
+apt install ntp ntpdate -y
+timedatectl set-timezone "Asia/Jakarta"
+dpkg-reconfigure tzdata
 
 SSH_PORT=`netstat -ntpl|grep sshd|grep -v grep | sed -n "1,1p" | awk '{print $4}' | awk -F : '{print $2}'`
 echo "SSH PORT:${SSH_PORT}"
