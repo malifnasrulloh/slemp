@@ -71,7 +71,13 @@ if [ $OSNAME != "macos" ];then
 	mkdir -p /home/slemp/backup/site
 
 	if [ ! -d /home/slemp/server/panel ];then
-		cp -r /root/slemp /home/slemp/server/panel
+		mkdir -p /home/slemp/server/panel
+		wget https://github.com/malifnasrulloh/slemp/archive/refs/heads/master.zip -O /tmp/slemp-latest.zip
+		mkdir -p /tmp/slemp-temp
+		unzip -o /tmp/slemp-latest.zip -d /tmp/slemp-temp
+		mv /tmp/slemp-temp/slemp-master/* /home/slemp/server/panel/
+		mv /tmp/slemp-temp/slemp-master/.* /home/slemp/server/panel/ 2>/dev/null || true &&
+		rm -rf /tmp/slemp-latest.zip /tmp/slemp-temp
 	fi
 
 	# install acme.sh

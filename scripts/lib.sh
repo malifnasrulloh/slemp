@@ -50,31 +50,34 @@ else
 fi
 
 
+apt update && apt install -y \
+build-essential curl git \
+libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev \
+libsqlite3-dev \
+libffi-dev libncursesw5-dev \
+xz-utils tk-dev \
+libxml2-dev libxmlsec1-dev \
+liblzma-dev ca-certificates
 
-VENV_PATH="/opt/python"
+curl https://pyenv.run | bash
 
-if [ ! -d "$VENV_PATH" ]; then
-    apt update && apt install -y python3-venv
-    python3 -m venv $VENV_PATH
-fi
+cat >> ~/.bashrc << 'EOF'
 
-rm -f /usr/local/bin/python
-rm -f /usr/local/bin/pip
-rm -f /usr/local/bin/python3
-rm -f /usr/local/bin/pip3
-ln -sf $VENV_PATH/bin/python3 /usr/local/bin/python
-ln -sf $VENV_PATH/bin/python3 /usr/local/bin/python3
-ln -sf $VENV_PATH/bin/pip3 /usr/local/bin/pip
-ln -sf $VENV_PATH/bin/pip3 /usr/local/bin/pip3
-export PATH="/usr/local/bin:$PATH"
-hash -d pip 2>/dev/null
-hash -d pip3 2>/dev/null
-hash -d python 2>/dev/null
-hash -d python3 2>/dev/null
-hash -r
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
+eval "$(pyenv init -)"
+
+EOF
+
+source ~/.bashrc
+
+pyenv install 3.13.5
+pyenv global 3.13.5
 
 pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
-pip install --upgrade pip setuptools wheel
+pip install --upgrade pip setuptools wheel virtualenv
 
 
 cd ${rootPath} && pip3pip3 install -r ${rootPath}/requirements.txt --no-cache-dir
