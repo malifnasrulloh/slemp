@@ -83,8 +83,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$($PYENV_ROOT/bin/pyenv init -)"
 
-pyenv install 3.11.2
-pyenv global 3.11.2
+pyenv install 3.9.2
+pyenv global 3.9.2
 
 pip install --upgrade pip setuptools wheel virtualenv
 
