@@ -20,7 +20,7 @@ VERSION_ID=`cat /etc/*-release | grep VERSION_ID | awk -F = '{print $2}' | awk -
 echo "${OSNAME}:${VERSION_ID}"
 
 if [ "$OSNAME" == "debian" ] || [ "$OSNAME" == "ubuntu" ]; then
-    apt install -y python3.11-dev build-essential
+    apt install -y python3-dev build-essential
 fi
 
 # system judge
@@ -76,7 +76,12 @@ eval "$(pyenv init -)"
 
 EOF
 
-source ~/.bashrc
+# disable due to non-interactive shell
+# source ~/.bashrc 
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$($PYENV_ROOT/bin/pyenv init -)"
 
 pyenv install 3.11.2
 pyenv global 3.11.2

@@ -46,7 +46,7 @@ elif grep -Eqi "Amazon Linux" /etc/issue || grep -Eqi "Amazon Linux" /etc/*-rele
 elif grep -Eqi "Debian" /etc/issue || grep -Eqi "Debian" /etc/os-release; then
 	OSNAME='debian'
 	apt update -y
-	apt install -y wget curl zip unzip tar cron
+	apt install -y wget curl zip unzip tar cron net-tools
 elif grep -Eqi "Ubuntu" /etc/issue || grep -Eqi "Ubuntu" /etc/os-release; then
 	OSNAME='ubuntu'
 	apt update -y
